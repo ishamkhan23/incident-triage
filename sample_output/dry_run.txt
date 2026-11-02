@@ -1,0 +1,38 @@
+---- [dry run: SLACK_WEBHOOK_URL not set] ----
+:rotating_light: *ERROR SPIKE* on `trade-capture` at 10:15
+241 errors in 6 min on trade-capture (normal ~1/min), mostly E_DB_POOL
+*Runbook - DB connection pool exhausted:*
+1. Check active DB connections and long-running queries
+2. Look for a recent deploy or traffic surge on the service
+3. If connections are leaking, restart the service instance (follow change process)
+4. Confirm error rate returns to baseline
+
+---- [dry run: SLACK_WEBHOOK_URL not set] ----
+:x: *JOB FAILED* on `positions` at 12:04
+Batch job position_snapshot failed: position qty mismatch for 14 accounts
+*Runbook - Position quantity mismatch:*
+1. Pull the affected account list from the job log
+2. Compare trade-capture totals vs position snapshot for those accounts
+3. Check for late or amended trades after the snapshot cutoff
+4. Rerun the snapshot once the source data is corrected; notify desk if P&L is affected
+
+---- [dry run: SLACK_WEBHOOK_URL not set] ----
+:hourglass: *JOB STUCK* on `settlements` at 16:30
+Batch job settlement_batch running 209 min with no completion
+*Runbook - Batch job started but never finished:*
+1. Check whether the process is still running (ps / scheduler status)
+2. Look at the last log lines for that job_id for where it stalled
+3. Check upstream dependencies (DB locks, file locks, downstream services)
+4. Kill and rerun if safe; escalate if it blocks downstream jobs
+
+---- [dry run: SLACK_WEBHOOK_URL not set] ----
+:x: *JOB FAILED* on `confirmations` at 18:01
+Batch job eod_confirms failed: counterparty file not found: cpty_confirms_20261102.csv
+*Runbook - Expected input file not found:*
+1. Confirm the file name and date in the inbound directory / SFTP
+2. Check whether the counterparty sent it late or under a different name
+3. Contact the counterparty or vendor if it is missing
+4. Rerun the job after the file lands
+
+Scanned 55,255 lines (516 errors) in 0.57s
+Found 4 incidents, 4 new (alerted), 0 already known

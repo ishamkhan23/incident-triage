@@ -1,0 +1,46 @@
+{
+  "E_DB_POOL": {
+    "title": "DB connection pool exhausted",
+    "steps": [
+      "Check active DB connections and long-running queries",
+      "Look for a recent deploy or traffic surge on the service",
+      "If connections are leaking, restart the service instance (follow change process)",
+      "Confirm error rate returns to baseline"
+    ]
+  },
+  "E_DATA_MISMATCH": {
+    "title": "Position quantity mismatch",
+    "steps": [
+      "Pull the affected account list from the job log",
+      "Compare trade-capture totals vs position snapshot for those accounts",
+      "Check for late or amended trades after the snapshot cutoff",
+      "Rerun the snapshot once the source data is corrected; notify desk if P&L is affected"
+    ]
+  },
+  "E_FILE_MISSING": {
+    "title": "Expected input file not found",
+    "steps": [
+      "Confirm the file name and date in the inbound directory / SFTP",
+      "Check whether the counterparty sent it late or under a different name",
+      "Contact the counterparty or vendor if it is missing",
+      "Rerun the job after the file lands"
+    ]
+  },
+  "STUCK_JOB": {
+    "title": "Batch job started but never finished",
+    "steps": [
+      "Check whether the process is still running (ps / scheduler status)",
+      "Look at the last log lines for that job_id for where it stalled",
+      "Check upstream dependencies (DB locks, file locks, downstream services)",
+      "Kill and rerun if safe; escalate if it blocks downstream jobs"
+    ]
+  },
+  "DEFAULT": {
+    "title": "Unrecognized error",
+    "steps": [
+      "Read the surrounding log lines for context",
+      "Check recent deploys and config changes",
+      "Escalate to the owning team if impact is unclear"
+    ]
+  }
+}
